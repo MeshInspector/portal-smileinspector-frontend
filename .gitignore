@@ -1,0 +1,108 @@
+# OS specific
+Thumbs.db
+.DS_Store
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Maven
+.mvn/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Micronaut
+.micronaut/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.settings/
+.classpath
+.factorypath
+.loadpath
+out/
+.junie/*
+.junie.md
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+*.gz
+
+# Temporary files
+*.tmp
+*.out
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Database files
+*.db
+*.h2.db
+*.mv.db
+*.sqlite
+
+# Certificates and keys
+*.p12
+*.key
+*.pem
+*.crt
+*.cer
+*.jks
+secrets/
+
+# Environment
+.env
+*.env
+
+# Process files
+*.pid
+*.seed
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.tfstate.lock.info
+.terraformrc
+terraform.rc
+
+# Other
+dynamodb-local-metadata.json
+__pycache__
+venv
+**/venv
+node_modules

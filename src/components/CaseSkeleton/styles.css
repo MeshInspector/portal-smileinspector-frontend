@@ -1,0 +1,14 @@
+.case-skeleton-root {
+  margin-bottom: 16px;
+}
+
+.case-skeleton-title {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.case-skeleton-button {
+  width: 32px;
+  height: 32px !important;
+}

@@ -1,0 +1,31 @@
+/* Global theme background synchronization to avoid white stripes in dark mode */
+
+html, body, #root {
+  height: 100%;
+}
+
+:root {
+  --app-bg-light: #FAFAFA; /* must match LIGHT_COLOR in ThemeWrapper */
+  --app-bg-dark: #181A1D;  /* must match DARK_COLOR in ThemeWrapper */
+  --app-bg: var(--app-bg-light);
+}
+
+html[data-theme="dark"] {
+  --app-bg: var(--app-bg-dark);
+}
+html[data-theme="light"] {
+  --app-bg: var(--app-bg-light);
+}
+
+html,
+body,
+#root,
+.ant-app,
+.ant-layout,
+.ant-layout-content {
+  background-color: var(--app-bg);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
