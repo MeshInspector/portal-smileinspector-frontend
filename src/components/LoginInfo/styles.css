@@ -23,14 +23,14 @@
   height: auto;
 }
 
-[data-theme='dark'] .login-info {
+[data-theme="dark"] .login-info {
   color: rgba(255, 255, 255, 0.85);
 }
 
-[data-theme='dark'] .logout-button {
+[data-theme="dark"] .logout-button {
   color: rgba(255, 255, 255, 0.85);
 }
 
-[data-theme='dark'] .logout-button:hover {
+[data-theme="dark"] .logout-button:hover {
   color: #1890ff;
 }

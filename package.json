@@ -9,7 +9,8 @@
     "build-dev": "tsc -b && vite build --mode dev",
     "build-qa": "tsc -b && vite build --mode qa",
     "build-prod": "tsc -b && vite build --mode prod",
-    "lint": "eslint .",
+    "lint": "biome lint",
+    "format": "biome format --write",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "zod": "^3.25.75"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.0",
     "@eslint/js": "^9.29.0",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^19.1.8",

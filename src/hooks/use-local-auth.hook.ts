@@ -1,20 +1,22 @@
-import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
-import Cookies from 'js-cookie';
-import type { User } from "oidc-client-ts";
+import { useEffect } from "react"
+import { useAuth } from "react-oidc-context"
+import Cookies from "js-cookie"
+import type { User } from "oidc-client-ts"
 
 const cognitoClientId = import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID
 
 const setCookie = (key: string, value: string, expires: number) => {
   Cookies.set(key, value, {
-    path: '/',
+    path: "/",
     secure: true,
     expires: expires / (24 * 60 * 60), // Convert seconds to days
   })
 }
 
 const setCookies = async (user: User) => {
-  const idTokenPayload = JSON.parse(atob(user?.id_token?.toString().split(".")[1] || ''))
+  const idTokenPayload = JSON.parse(
+    atob(user?.id_token?.toString().split(".")[1] || ""),
+  )
   const userSub = idTokenPayload.sub
 
   const cookiePrefix = `CognitoIdentityServiceProvider.${cognitoClientId}.${userSub}`
@@ -26,7 +28,11 @@ const setCookies = async (user: User) => {
 
   // Set refresh token
   if (user.refresh_token) {
-    setCookie(`${cookiePrefix}.refreshToken`, user.refresh_token.toString(), 30 * 24 * 3600) // 30 days
+    setCookie(
+      `${cookiePrefix}.refreshToken`,
+      user.refresh_token.toString(),
+      30 * 24 * 3600,
+    ) // 30 days
   }
 
   // Set ID token
@@ -36,15 +42,21 @@ const setCookies = async (user: User) => {
 
   // Set LastAuthUser
   if (userSub) {
-    setCookie(`CognitoIdentityServiceProvider.${cognitoClientId}.LastAuthUser`, userSub, 3600) // 1 hour
+    setCookie(
+      `CognitoIdentityServiceProvider.${cognitoClientId}.LastAuthUser`,
+      userSub,
+      3600,
+    ) // 1 hour
   }
 
-  setCookie(`${cookiePrefix}.clockDrift`, '0', 30 * 24 * 3600) // 30 days
+  setCookie(`${cookiePrefix}.clockDrift`, "0", 30 * 24 * 3600) // 30 days
 }
 
 export const useLocalAuth = () => {
-  const auth = useAuth();
-  const isLocalHost = location.host.includes('local.cms.io') || location.host.includes('localhost')
+  const auth = useAuth()
+  const isLocalHost =
+    location.host.includes("local.cms.io") ||
+    location.host.includes("localhost")
 
   useEffect(() => {
     if (auth.isAuthenticated && isLocalHost) {
@@ -53,15 +65,17 @@ export const useLocalAuth = () => {
           if (auth.user) {
             await setCookies(auth.user)
           } else {
-            console.error('Failed to setCookies: auth.user is null')
+            console.error("Failed to setCookies: auth.user is null")
           }
         } catch (error) {
-          console.error('Error saving tokens to cookies:', error)
+          console.error("Error saving tokens to cookies:", error)
         }
       }
-      saveTokensToCookies().catch(error => console.error('Error saving tokens to cookies:', error))
+      saveTokensToCookies().catch((error) =>
+        console.error("Error saving tokens to cookies:", error),
+      )
     }
-  }, [auth, isLocalHost]);
+  }, [auth, isLocalHost])
 
   useEffect(() => {
     if (isLocalHost) {
@@ -71,15 +85,17 @@ export const useLocalAuth = () => {
         }
       }
 
-      makeLocalAuth().catch(error => console.error('Error making local auth:', error))
+      makeLocalAuth().catch((error) =>
+        console.error("Error making local auth:", error),
+      )
     }
-  }, [auth, isLocalHost]);
+  }, [auth, isLocalHost])
 
   const signOut = async () => {
     if (isLocalHost) {
       await auth.signoutRedirect()
     }
-  };
+  }
 
   return { signOut }
-};
+}

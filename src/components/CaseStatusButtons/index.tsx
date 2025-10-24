@@ -1,45 +1,51 @@
-import React from 'react'
-import { App as AntApp, Button, Popconfirm, Space } from 'antd'
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type React from "react"
+import { App as AntApp, Button, Popconfirm, Space } from "antd"
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-import { ApiService } from '../../services'
-import { useNotifications } from '../../hooks/use-notifications.hook'
-import { ECaseStatus } from '../../types/case'
-import { canApproveCase, canRejectCase } from '../../utils/case-status.util'
+import { ApiService } from "../../services"
+import { useNotifications } from "../../hooks/use-notifications.hook"
+import { ECaseStatus } from "../../types/case"
+import { canApproveCase, canRejectCase } from "../../utils/case-status.util"
 
 interface CaseStatusButtonsProps {
   caseCode: string
   caseStatus?: string
 }
 
-const CaseStatusButtons: React.FC<CaseStatusButtonsProps> = ({ caseCode, caseStatus }) => {
+const CaseStatusButtons: React.FC<CaseStatusButtonsProps> = ({
+  caseCode,
+  caseStatus,
+}) => {
   const { message } = AntApp.useApp()
-  const { notify, contextHolder: notificationContextHolder } = useNotifications()
+  const { notify, contextHolder: notificationContextHolder } =
+    useNotifications()
   const queryClient = useQueryClient()
 
   const approveMutation = useMutation({
-    mutationFn: () => ApiService.updateCaseStatus(caseCode, ECaseStatus.APPROVED),
+    mutationFn: () =>
+      ApiService.updateCaseStatus(caseCode, ECaseStatus.APPROVED),
     onSuccess: () => {
-      message.success('Case approved successfully')
-      queryClient.invalidateQueries({ queryKey: ['case', caseCode] })
-      queryClient.invalidateQueries({ queryKey: ['case-history', caseCode] })
+      message.success("Case approved successfully")
+      queryClient.invalidateQueries({ queryKey: ["case", caseCode] })
+      queryClient.invalidateQueries({ queryKey: ["case-history", caseCode] })
     },
     onError: (error) => {
-      notify.error(error, 'Failed to approve case')
-    }
+      notify.error(error, "Failed to approve case")
+    },
   })
 
   const rejectMutation = useMutation({
-    mutationFn: () => ApiService.updateCaseStatus(caseCode, ECaseStatus.REJECTED),
+    mutationFn: () =>
+      ApiService.updateCaseStatus(caseCode, ECaseStatus.REJECTED),
     onSuccess: () => {
-      message.success('Case rejected successfully')
-      queryClient.invalidateQueries({ queryKey: ['case', caseCode] })
-      queryClient.invalidateQueries({ queryKey: ['case-history', caseCode] })
+      message.success("Case rejected successfully")
+      queryClient.invalidateQueries({ queryKey: ["case", caseCode] })
+      queryClient.invalidateQueries({ queryKey: ["case-history", caseCode] })
     },
     onError: (error) => {
-      notify.error(error, 'Failed to reject case')
-    }
+      notify.error(error, "Failed to reject case")
+    },
   })
 
   const handleApprove = () => {
@@ -50,7 +56,8 @@ const CaseStatusButtons: React.FC<CaseStatusButtonsProps> = ({ caseCode, caseSta
     rejectMutation.mutate()
   }
 
-  const isAnyMutationPending = approveMutation.isPending || rejectMutation.isPending
+  const isAnyMutationPending =
+    approveMutation.isPending || rejectMutation.isPending
 
   const isApproveDisabled = !canApproveCase(caseStatus) || isAnyMutationPending
   const isRejectDisabled = !canRejectCase(caseStatus) || isAnyMutationPending
@@ -77,14 +84,14 @@ const CaseStatusButtons: React.FC<CaseStatusButtonsProps> = ({ caseCode, caseSta
             Reject
           </Button>
         </Popconfirm>
-        
+
         <Popconfirm
           title="Approve Case"
           description={`Are you sure you want to approve case ${caseCode}?`}
           onConfirm={handleApprove}
           okText="Yes"
           cancelText="No"
-          okButtonProps={{ type: 'primary' }}
+          okButtonProps={{ type: "primary" }}
           disabled={isApproveDisabled}
         >
           <Button

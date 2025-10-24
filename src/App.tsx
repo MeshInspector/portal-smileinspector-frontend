@@ -1,29 +1,37 @@
-import { createRootRoute, createRoute, createRouter, redirect, RouterProvider } from '@tanstack/react-router'
-import { z } from 'zod'
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  redirect,
+  RouterProvider,
+} from "@tanstack/react-router"
+import { z } from "zod"
 
-import './App.css'
-import CaseListPage from './pages/CaseListPage'
-import CasePage from './pages/CasePage'
-import AppOutlet from './components/Outlet/Outlet.tsx'
+import "./App.css"
+import CaseListPage from "./pages/CaseListPage"
+import CasePage from "./pages/CasePage"
+import AppOutlet from "./components/Outlet/Outlet.tsx"
 
 const rootRoute = createRootRoute()
 
 const redirectRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
-  loader: () => { throw redirect({ to: '/cases' }) },
+  path: "/",
+  loader: () => {
+    throw redirect({ to: "/cases" })
+  },
   component: () => null,
 })
 
 const outletRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/cases',
+  path: "/cases",
   component: AppOutlet,
 })
 
 const casesRoute = createRoute({
   getParentRoute: () => outletRoute,
-  path: '/',
+  path: "/",
   component: CaseListPage,
   validateSearch: z.object({
     page: z.coerce.number().optional(),
@@ -34,25 +42,21 @@ const casesRoute = createRoute({
 
 const caseRoute = createRoute({
   getParentRoute: () => outletRoute,
-  path: '$code',
+  path: "$code",
   component: CasePage,
   preload: true,
 })
 
 const filePreviewRoute = createRoute({
   getParentRoute: () => outletRoute,
-  path: '$code/preview/$fileUid',
+  path: "$code/preview/$fileUid",
   component: CasePage,
   preload: true,
 })
 
 const routeTree = rootRoute.addChildren([
   redirectRoute,
-  outletRoute.addChildren([
-    casesRoute,
-    caseRoute,
-    filePreviewRoute,
-  ]),
+  outletRoute.addChildren([casesRoute, caseRoute, filePreviewRoute]),
 ])
 
 const router = createRouter({
@@ -60,7 +64,7 @@ const router = createRouter({
 })
 
 function App() {
-  return <RouterProvider router={router}/>
+  return <RouterProvider router={router} />
 }
 
 export default App

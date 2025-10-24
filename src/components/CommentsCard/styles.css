@@ -81,14 +81,14 @@
 }
 
 /* Dark theme styles */
-[data-theme='dark'] .comment-item {
+[data-theme="dark"] .comment-item {
   border-bottom-color: #303030;
 }
 
-[data-theme='dark'] .comments-loading {
+[data-theme="dark"] .comments-loading {
   color: rgba(255, 255, 255, 0.45);
 }
 
-[data-theme='dark'] .comments-error {
+[data-theme="dark"] .comments-error {
   color: #ff7875;
 }

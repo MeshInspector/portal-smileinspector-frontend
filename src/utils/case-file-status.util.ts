@@ -1,14 +1,14 @@
-import { ECaseFileStatus } from '../types/case-file.ts'
+import { ECaseFileStatus } from "../types/case-file.ts"
 
 export const getCaseFileStatusLabel = (status: ECaseFileStatus): string => {
   switch (status) {
     case ECaseFileStatus.Pending:
-      return 'Pending'
+      return "Pending"
     case ECaseFileStatus.Uploaded:
-      return 'Uploaded'
+      return "Uploaded"
     case ECaseFileStatus.Reupload:
-      return 'Reupload'
+      return "Reupload"
     default:
-      return 'Unknown'
+      return "Unknown"
   }
 }

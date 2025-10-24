@@ -1,19 +1,19 @@
-import { notification } from 'antd'
-import { useCallback, useMemo } from 'react'
+import { notification } from "antd"
+import { useCallback, useMemo } from "react"
 
-import { parseError } from '../utils/error.util.ts'
+import { parseError } from "../utils/error.util.ts"
 
 export const useNotifications = () => {
   const [api, contextHolder] = notification.useNotification()
 
   const error = useCallback(
-    (error: Error, title: string = 'Error') => {
+    (error: Error, title: string = "Error") => {
       const errorMessage = parseError(error)
       api.error({
         message: title,
         description: errorMessage,
         duration: 5,
-        placement: 'topRight',
+        placement: "topRight",
       })
     },
     [api],
@@ -25,7 +25,7 @@ export const useNotifications = () => {
         message,
         description,
         duration: 3,
-        placement: 'topRight',
+        placement: "topRight",
       })
     },
     [api],
@@ -37,7 +37,7 @@ export const useNotifications = () => {
         message,
         description,
         duration: 4,
-        placement: 'topRight',
+        placement: "topRight",
       })
     },
     [api],
@@ -49,7 +49,7 @@ export const useNotifications = () => {
         message,
         description,
         duration: 3,
-        placement: 'topRight',
+        placement: "topRight",
       })
     },
     [api],
