@@ -1,4 +1,3 @@
-
 output "frontend_url" {
   value = "https://${var.domain_name}"
 }
@@ -6,11 +5,6 @@ output "frontend_url" {
 output "s3_bucket_id" {
   description = "ID of the S3 bucket"
   value       = module.s3.frontend_bucket_id
-}
-
-output "s3_bucket_website_endpoint" {
-  description = "Website endpoint of the S3 bucket"
-  value       = module.s3.frontend_bucket_website_endpoint
 }
 
 output "cloudfront_distribution_id" {
