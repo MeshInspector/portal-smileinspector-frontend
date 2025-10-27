@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useAuth } from "react-oidc-context"
 import Cookies from "js-cookie"
 import type { User } from "oidc-client-ts"
+import { redirect } from "@tanstack/react-router";
 
 const cognitoClientId = import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID
 
@@ -55,7 +56,7 @@ const setCookies = async (user: User) => {
 export const useLocalAuth = () => {
   const auth = useAuth()
   const isLocalHost =
-    location.host.includes("local.cms.io") ||
+    location.host.includes("local.portal.io") ||
     location.host.includes("localhost")
 
   useEffect(() => {
@@ -78,16 +79,18 @@ export const useLocalAuth = () => {
   }, [auth, isLocalHost])
 
   useEffect(() => {
-    if (isLocalHost) {
-      const makeLocalAuth = async () => {
-        if (!auth.isLoading && !auth.isAuthenticated) {
-          await auth.signinRedirect()
-        }
+    const makeLocalAuth = async () => {
+      if (!auth.isLoading && !auth.isAuthenticated) {
+        await auth.signinRedirect()
       }
+    }
 
+    if (isLocalHost) {
       makeLocalAuth().catch((error) =>
         console.error("Error making local auth:", error),
       )
+    } else {
+      redirect({ to: import.meta.env.VITE_LOGIN_PAGE_URL })
     }
   }, [auth, isLocalHost])
 

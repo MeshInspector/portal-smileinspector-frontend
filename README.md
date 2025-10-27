@@ -1,4 +1,4 @@
-# CMS Frontend
+# SmileInspector Portal Frontend
 
 ## Environment Variables
 

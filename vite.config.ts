@@ -12,8 +12,8 @@ export default defineConfig({
     assetsDir: 'static', // Change assets directory from the default 'assets' to 'static' to avoid conflict with Login SPA
   },
   server: {
-    host: 'local.cms.io',
-    allowedHosts: ['local.cms.io'],
+    host: 'local.portal.io',
+    allowedHosts: ['local.portal.io'],
     port: 3000,
     proxy: {
       '/v1': {

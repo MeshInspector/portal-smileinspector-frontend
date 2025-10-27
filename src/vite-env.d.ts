@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly VITE_COGNITO_USER_POOL_CLIENT_ID: string
   readonly VITE_VIEWER_URL: string
   readonly VITE_UPPER_DOMAIN_NAME: string
+  readonly VITE_LOGIN_PAGE_URL: string
 }
 
 interface ImportMeta {
