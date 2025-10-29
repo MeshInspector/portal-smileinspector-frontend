@@ -1,12 +1,14 @@
 /* Global theme background synchronization to avoid white stripes in dark mode */
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
 :root {
-  --app-bg-light: #FAFAFA; /* must match LIGHT_COLOR in ThemeWrapper */
-  --app-bg-dark: #181A1D;  /* must match DARK_COLOR in ThemeWrapper */
+  --app-bg-light: #fafafa; /* must match LIGHT_COLOR in ThemeWrapper */
+  --app-bg-dark: #181a1d; /* must match DARK_COLOR in ThemeWrapper */
   --app-bg: var(--app-bg-light);
 }
 

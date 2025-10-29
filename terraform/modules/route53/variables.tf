@@ -1,5 +1,5 @@
 variable "domain_name" {
-  description = "Domain name for the frontend (e.g., cms.dev.smileinspector.io)"
+  description = "Domain name for the frontend (e.g., portal.dev.smileinspector.io)"
   type        = string
 }
 

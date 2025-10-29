@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
-import { App as AntApp, Typography } from 'antd'
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons'
+import type React from "react"
+import { useState } from "react"
+import { App as AntApp, Typography } from "antd"
+import { CheckOutlined, CopyOutlined } from "@ant-design/icons"
 
-import './styles.css'
-import { copyToClipboard } from '../../utils/clipboard.util.ts'
+import "./styles.css"
+import { copyToClipboard } from "../../utils/clipboard.util.ts"
 
 const { Text } = Typography
 
 interface CopyableProps {
-  value: string | null | undefined;
-  children?: React.ReactNode;
+  value: string | null | undefined
+  children?: React.ReactNode
 }
 
 const Copyable: React.FC<CopyableProps> = ({ value, children }) => {
@@ -25,13 +26,13 @@ const Copyable: React.FC<CopyableProps> = ({ value, children }) => {
     if (success) {
       setShowCheck(true)
       setTimeout(() => setShowCheck(false), 2000)
-      message.success('Copied to clipboard')
+      message.success("Copied to clipboard")
     } else {
-      message.error('Failed to copy to clipboard')
+      message.error("Failed to copy to clipboard")
     }
   }
 
-  const displayValue = value || children || '-'
+  const displayValue = value || children || "-"
 
   return (
     <div
@@ -43,10 +44,8 @@ const Copyable: React.FC<CopyableProps> = ({ value, children }) => {
     >
       <Text className="copyable-text">{displayValue}</Text>
       {value && (isHovered || showCheck) && (
-        <div
-          className={`copyable-icon ${showCheck ? 'check' : 'copy'}`}
-        >
-          {showCheck ? <CheckOutlined/> : <CopyOutlined/>}
+        <div className={`copyable-icon ${showCheck ? "check" : "copy"}`}>
+          {showCheck ? <CheckOutlined /> : <CopyOutlined />}
         </div>
       )}
     </div>

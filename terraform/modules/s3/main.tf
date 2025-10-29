@@ -11,8 +11,8 @@ resource "aws_s3_bucket" "frontend" {
 }
 
 locals {
-  bucket_id = aws_s3_bucket.frontend.id
-  bucket_arn = aws_s3_bucket.frontend.arn
+  bucket_id                   = aws_s3_bucket.frontend.id
+  bucket_arn                  = aws_s3_bucket.frontend.arn
   bucket_regional_domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
 }
 
@@ -54,38 +54,32 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
   }
 }
 
-locals {
-  website_endpoint = aws_s3_bucket_website_configuration.frontend.website_endpoint
-}
-
-data "aws_region" "current" {}
-
 resource "aws_s3_bucket_policy" "frontend" {
   count  = var.create_bucket_policy ? 1 : 0
   bucket = local.bucket_id
 
   policy = jsonencode(
     {
-      "Version": "2008-10-17",
-      "Id": "PolicyForCloudFrontPrivateContent",
-      "Statement": [
+      "Version" : "2008-10-17",
+      "Id" : "PolicyForCloudFrontPrivateContent",
+      "Statement" : [
         {
-          "Sid": "AllowCloudFrontServicePrincipal",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "cloudfront.amazonaws.com"
+          "Sid" : "AllowCloudFrontServicePrincipal",
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "cloudfront.amazonaws.com"
           },
-          "Action": "s3:GetObject",
-          Resource  = "${local.bucket_arn}/*"
+          "Action" : "s3:GetObject",
+          Resource = "${local.bucket_arn}/*"
         },
         {
-          Sid       = "AllowCloudFrontOAI",
-          Effect    = "Allow",
+          Sid    = "AllowCloudFrontOAI",
+          Effect = "Allow",
           Principal = {
             AWS = var.cloudfront_oai_arn
           },
-          Action    = "s3:GetObject",
-          Resource  = "${local.bucket_arn}/*"
+          Action   = "s3:GetObject",
+          Resource = "${local.bucket_arn}/*"
         }
       ]
     }

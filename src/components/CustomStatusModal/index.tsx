@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Modal, AutoComplete } from 'antd'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { App as AntApp } from 'antd'
+import type React from "react"
+import { useState, useEffect } from "react"
+import { Modal, AutoComplete } from "antd"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { App as AntApp } from "antd"
 
-import './styles.css'
-import { ApiService } from '../../services'
-import { useNotifications } from '../../hooks/use-notifications.hook'
-import { ECaseStatus } from '../../types/case'
+import "./styles.css"
+import { ApiService } from "../../services"
+import { useNotifications } from "../../hooks/use-notifications.hook"
+import { ECaseStatus } from "../../types/case"
 
 interface CustomStatusModalProps {
   caseCode: string
@@ -15,19 +16,26 @@ interface CustomStatusModalProps {
   onCancel: () => void
 }
 
-const CustomStatusModal: React.FC<CustomStatusModalProps> = ({ caseCode, status, isOpened, onCancel }) => {
+const CustomStatusModal: React.FC<CustomStatusModalProps> = ({
+  caseCode,
+  status,
+  isOpened,
+  onCancel,
+}) => {
   const { message } = AntApp.useApp()
   const { notify } = useNotifications()
   const queryClient = useQueryClient()
-  const [customStatus, setCustomStatus] = useState(status || '')
+  const [customStatus, setCustomStatus] = useState(status || "")
 
   useEffect(() => {
     if (isOpened) {
-      setCustomStatus(status || '')
+      setCustomStatus(status || "")
     }
   }, [isOpened, status])
 
-  const statusOptions: Array<{ value: string, label: string }> = Object.values(ECaseStatus).map(statusValue => ({
+  const statusOptions: Array<{ value: string; label: string }> = Object.values(
+    ECaseStatus,
+  ).map((statusValue) => ({
     value: statusValue,
     label: statusValue,
   }))
@@ -37,16 +45,17 @@ const CustomStatusModal: React.FC<CustomStatusModalProps> = ({ caseCode, status,
   }
 
   const customStatusMutation = useMutation({
-    mutationFn: (status: string) => ApiService.updateCaseStatus(caseCode, status),
+    mutationFn: (status: string) =>
+      ApiService.updateCaseStatus(caseCode, status),
     onSuccess: () => {
-      message.success('Case status updated successfully')
-      queryClient.invalidateQueries({ queryKey: ['case', caseCode] })
-      queryClient.invalidateQueries({ queryKey: ['case-history', caseCode] })
+      message.success("Case status updated successfully")
+      queryClient.invalidateQueries({ queryKey: ["case", caseCode] })
+      queryClient.invalidateQueries({ queryKey: ["case-history", caseCode] })
       handleCancel()
     },
     onError: (error) => {
-      notify.error(error, 'Failed to update case status')
-    }
+      notify.error(error, "Failed to update case status")
+    },
   })
 
   const handleCustomStatus = () => {
@@ -56,7 +65,7 @@ const CustomStatusModal: React.FC<CustomStatusModalProps> = ({ caseCode, status,
   }
 
   const handleCancel = () => {
-    setCustomStatus('')
+    setCustomStatus("")
     onCancel()
   }
 
@@ -78,7 +87,7 @@ const CustomStatusModal: React.FC<CustomStatusModalProps> = ({ caseCode, status,
         onChange={setCustomStatus}
         onSelect={setCustomStatus}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') {
+          if (e.key === "Enter") {
             handleCustomStatus()
           }
         }}
@@ -91,4 +100,3 @@ const CustomStatusModal: React.FC<CustomStatusModalProps> = ({ caseCode, status,
 }
 
 export default CustomStatusModal
-

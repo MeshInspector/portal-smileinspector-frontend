@@ -1,10 +1,10 @@
-import React from 'react'
-import { Button, Card, Popconfirm, Row, Space, Table, Typography } from 'antd'
-import { DeleteOutlined, EditOutlined, ExportOutlined } from '@ant-design/icons'
+import type React from "react"
+import { Button, Card, Popconfirm, Row, Space, Table, Typography } from "antd"
+import { DeleteOutlined, EditOutlined, ExportOutlined } from "@ant-design/icons"
 
-import Copyable from '../Copyable'
-import CopyLinkButton from '../CopyLinkButton'
-import CaseStatusButtons from "../CaseStatusButtons";
+import Copyable from "../Copyable"
+import CopyLinkButton from "../CopyLinkButton"
+import CaseStatusButtons from "../CaseStatusButtons"
 
 const { Title } = Typography
 
@@ -17,22 +17,34 @@ interface CaseCardProps {
   onDelete: () => void
 }
 
-const CaseCard: React.FC<CaseCardProps> = ({ code, status, displayCode, dataSource, columns, onDelete }) => {
+const CaseCard: React.FC<CaseCardProps> = ({
+  code,
+  status,
+  displayCode,
+  dataSource,
+  columns,
+  onDelete,
+}) => {
   return (
     <Card
       title={
         <Row justify="start" align="middle">
-          <Title className="case-title" level={3}>Case: <Copyable value={displayCode ?? code}>{displayCode ?? code}</Copyable></Title>
-          <Button className="case-link-button" icon={<EditOutlined/>}/>
+          <Title className="case-title" level={3}>
+            Case:{" "}
+            <Copyable value={displayCode ?? code}>
+              {displayCode ?? code}
+            </Copyable>
+          </Title>
+          <Button className="case-link-button" icon={<EditOutlined />} />
         </Row>
       }
       extra={
         <Space>
-          <CopyLinkButton/>
+          <CopyLinkButton />
           <Button
             href={`${import.meta.env.VITE_VIEWER_URL}/?caseCode=${code}`}
-            target={'_blank'}
-            icon={<ExportOutlined/>}
+            target={"_blank"}
+            icon={<ExportOutlined />}
           >
             Open in Viewer
           </Button>
@@ -56,15 +68,11 @@ const CaseCard: React.FC<CaseCardProps> = ({ code, status, displayCode, dataSour
           cancelText="No"
           okButtonProps={{ danger: true }}
         >
-          <Button
-            type="text"
-            icon={<DeleteOutlined />}
-            danger
-          >
+          <Button type="text" icon={<DeleteOutlined />} danger>
             Delete Case
           </Button>
         </Popconfirm>
-        <CaseStatusButtons caseCode={code} caseStatus={status}/>
+        <CaseStatusButtons caseCode={code} caseStatus={status} />
       </div>
     </Card>
   )

@@ -1,11 +1,22 @@
-import React, { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Card, Input, List, Typography, Popconfirm, App as AntApp, Empty } from 'antd'
-import { DeleteOutlined, SendOutlined } from '@ant-design/icons'
-import { ApiService } from '../../services'
-import type { Comment } from '../../types/comment'
-import { useNotifications } from '../../hooks/use-notifications.hook'
-import './styles.css'
+import type React from "react"
+import { useState } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  Button,
+  Card,
+  Input,
+  List,
+  Typography,
+  Popconfirm,
+  App as AntApp,
+  Empty,
+} from "antd"
+import { DeleteOutlined, SendOutlined } from "@ant-design/icons"
+
+import { ApiService } from "../../services"
+import type { Comment } from "../../types/comment"
+import { useNotifications } from "../../hooks/use-notifications.hook"
+import "./styles.css"
 
 const { Text } = Typography
 const { TextArea } = Input
@@ -15,44 +26,56 @@ interface CommentsPanelProps {
 }
 
 const DEFAULT_PAGE_SIZE = 10
-const DEFAULT_COMMENT_SORT_BY = 'createdAt'
+const DEFAULT_COMMENT_SORT_BY = "createdAt"
 
 const CommentsPanel: React.FC<CommentsPanelProps> = ({ caseCode }) => {
-  const [newComment, setNewComment] = useState('')
+  const [newComment, setNewComment] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const queryClient = useQueryClient()
   const { message } = AntApp.useApp()
-  const { notify, contextHolder: notificationContextHolder } = useNotifications()
+  const { notify, contextHolder: notificationContextHolder } =
+    useNotifications()
 
-  const { data: commentsData, isLoading: isCommentsLoading, error: commentsError } = useQuery({
-    queryKey: ['case-comments', caseCode, currentPage, DEFAULT_PAGE_SIZE],
-    queryFn: () => ApiService.getCaseComments(caseCode, { page: currentPage, size: DEFAULT_PAGE_SIZE, sort: DEFAULT_COMMENT_SORT_BY }),
+  const {
+    data: commentsData,
+    isLoading: isCommentsLoading,
+    error: commentsError,
+  } = useQuery({
+    queryKey: ["case-comments", caseCode, currentPage, DEFAULT_PAGE_SIZE],
+    queryFn: () =>
+      ApiService.getCaseComments(caseCode, {
+        page: currentPage,
+        size: DEFAULT_PAGE_SIZE,
+        sort: DEFAULT_COMMENT_SORT_BY,
+      }),
     enabled: !!caseCode,
   })
 
   const addCommentMutation = useMutation({
-    mutationFn: (content: string) => ApiService.addCaseComment(caseCode, { content }),
+    mutationFn: (content: string) =>
+      ApiService.addCaseComment(caseCode, { content }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['case-comments', caseCode] })
-      queryClient.invalidateQueries({ queryKey: ['case-history', caseCode] })
-      setNewComment('')
-      message.success('Comment added successfully')
+      queryClient.invalidateQueries({ queryKey: ["case-comments", caseCode] })
+      queryClient.invalidateQueries({ queryKey: ["case-history", caseCode] })
+      setNewComment("")
+      message.success("Comment added successfully")
     },
     onError: (error) => {
-      notify.error(error, 'Failed to add comment')
-    }
+      notify.error(error, "Failed to add comment")
+    },
   })
 
   const deleteCommentMutation = useMutation({
-    mutationFn: (commentUid: string) => ApiService.deleteCaseComment(caseCode, commentUid),
+    mutationFn: (commentUid: string) =>
+      ApiService.deleteCaseComment(caseCode, commentUid),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['case-comments', caseCode] })
-      queryClient.invalidateQueries({ queryKey: ['case-history', caseCode] })
-      message.success('Comment deleted successfully')
+      queryClient.invalidateQueries({ queryKey: ["case-comments", caseCode] })
+      queryClient.invalidateQueries({ queryKey: ["case-history", caseCode] })
+      message.success("Comment deleted successfully")
     },
     onError: (error) => {
-      notify.error(error, 'Failed to delete comment')
-    }
+      notify.error(error, "Failed to delete comment")
+    },
   })
 
   const handleAddComment = () => {
@@ -75,7 +98,11 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({ caseCode }) => {
     <>
       {notificationContextHolder}
       <Card
-        title={<div className="comments-title">Comments ({commentsData?.totalCount || 0})</div>}
+        title={
+          <div className="comments-title">
+            Comments ({commentsData?.totalCount || 0})
+          </div>
+        }
         className="comments-panel"
       >
         <div className="comments-container">
@@ -115,7 +142,7 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({ caseCode }) => {
                           size="small"
                           danger
                         />
-                      </Popconfirm>
+                      </Popconfirm>,
                     ]}
                   >
                     <div className="comment-content">
