@@ -4,6 +4,7 @@ import type { CaseFileList } from "../types/case-file.ts"
 import type { Comment, CommentList, CommentInput } from "../types/comment.ts"
 import type {
   InvitationListResponse,
+  InvitationResponse,
 } from "../types/invitation.ts"
 import { parseError } from "../utils/error.util.ts"
 import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito"
@@ -425,6 +426,18 @@ export class ApiService {
         },
       )
 
+      return response.data
+    } catch (error) {
+      throw new Error(parseError(error))
+    }
+  }
+
+  static async sendInvitation(email: string): Promise<InvitationResponse> {
+    try {
+      const response = await apiClient.post<InvitationResponse>(
+        "/v1/invitations",
+        { email },
+      )
       return response.data
     } catch (error) {
       throw new Error(parseError(error))

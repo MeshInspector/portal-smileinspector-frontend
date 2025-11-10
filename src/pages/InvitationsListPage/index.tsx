@@ -6,11 +6,14 @@ import {
   Input,
   Select,
   Space, Col, Row,
+  Modal,
+  Tag,
 } from "antd"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState, useEffect } from "react"
 import { useRouter, useSearch } from "@tanstack/react-router"
 import type { FilterDropdownProps } from "antd/es/table/interface"
+import { App as AntApp } from "antd"
 
 import "./styles.css"
 import { useNotifications } from "../../hooks/use-notifications.hook.ts"
@@ -26,12 +29,18 @@ const InvitationsListPage = () => {
   const search = useSearch({ strict: false })
   const { notify, contextHolder: notificationContextHolder } =
     useNotifications()
+  const { message } = AntApp.useApp()
+  const queryClient = useQueryClient()
   const [invitations, setInvitations] = useState<InvitationResponse[]>([])
   const [nextCursor, setNextCursor] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(false)
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     undefined,
   )
+  const [isSendInvitationModalOpen, setIsSendInvitationModalOpen] =
+    useState(false)
+  const [invitationEmail, setInvitationEmail] = useState("")
+  const [resendingEmail, setResendingEmail] = useState<string | null>(null)
 
   const emailFilter = search.email || undefined
   const statusFilter = search.status || undefined
@@ -50,6 +59,34 @@ const InvitationsListPage = () => {
     ],
     queryFn: () =>
       ApiService.getInvitations(currentCursor, emailFilter, statusFilter),
+  })
+
+  const sendInvitationMutation = useMutation({
+    mutationFn: (email: string) => ApiService.sendInvitation(email),
+    onSuccess: () => {
+      message.success("Invitation sent successfully")
+      setIsSendInvitationModalOpen(false)
+      setInvitationEmail("")
+      setCurrentCursor(undefined)
+      queryClient.refetchQueries({ queryKey: ["invitations"] })
+    },
+    onError: (error) => {
+      notify.error(error, "Failed to send invitation")
+    },
+  })
+
+  const resendInvitationMutation = useMutation({
+    mutationFn: (email: string) => ApiService.sendInvitation(email),
+    onSuccess: () => {
+      message.success("Invitation resent successfully")
+      setResendingEmail(null)
+      setCurrentCursor(undefined)
+      queryClient.refetchQueries({ queryKey: ["invitations"] })
+    },
+    onError: (error) => {
+      notify.error(error, "Failed to resend invitation")
+      setResendingEmail(null)
+    },
   })
 
   useEffect(() => {
@@ -77,6 +114,41 @@ const InvitationsListPage = () => {
   const handleLoadMore = () => {
     if (nextCursor) {
       setCurrentCursor(nextCursor)
+    }
+  }
+
+  const handleOpenSendInvitationModal = () => {
+    setIsSendInvitationModalOpen(true)
+  }
+
+  const handleCloseSendInvitationModal = () => {
+    setIsSendInvitationModalOpen(false)
+    setInvitationEmail("")
+  }
+
+  const handleSendInvitation = () => {
+    if (invitationEmail.trim()) {
+      sendInvitationMutation.mutate(invitationEmail.trim())
+    }
+  }
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const getInvitationStatusColor = (status: string): string => {
+    switch (status) {
+      case EInvitationStatus.PENDING:
+        return "processing"
+      case EInvitationStatus.ACCEPTED:
+        return "success"
+      case EInvitationStatus.CANCELLED:
+        return "default"
+      case EInvitationStatus.EXPIRED:
+        return "error"
+      default:
+        return "default"
     }
   }
 
@@ -160,6 +232,9 @@ const InvitationsListPage = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (status: string) => (
+        <Tag color={getInvitationStatusColor(status)}>{status}</Tag>
+      ),
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -238,12 +313,47 @@ const InvitationsListPage = () => {
       render: (date: string | null) =>
         date ? new Date(date).toLocaleString() : "-",
     },
+    {
+      title: "Actions",
+      key: "actions",
+      dataIndex: "uid",
+      render: (_: unknown, record: InvitationResponse) => {
+        const isAccepted = record.status === EInvitationStatus.ACCEPTED
+        const isResending = resendingEmail === record.email
+
+        if (isAccepted) {
+          return null
+        }
+
+        return (
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              setResendingEmail(record.email)
+              resendInvitationMutation.mutate(record.email)
+            }}
+            loading={isResending}
+            disabled={isResending}
+          >
+            Resend
+          </Button>
+        )
+      },
+    },
   ]
 
   return (
     <div className={"invitations-list-page"}>
       {notificationContextHolder}
-      <Card className="invitations-table-container">
+      <Card
+        className="invitations-table-container"
+        extra={
+          <Button type="primary" onClick={handleOpenSendInvitationModal}>
+            Invite new user
+          </Button>
+        }
+      >
         {isLoading && invitations.length === 0 ? (
           <TableSkeleton columns={columns} />
         ) : (
@@ -272,6 +382,27 @@ const InvitationsListPage = () => {
           </>
         )}
       </Card>
+      <Modal
+        title="Send Invitation"
+        open={isSendInvitationModalOpen}
+        onOk={handleSendInvitation}
+        onCancel={handleCloseSendInvitationModal}
+        okText="Send"
+        cancelText="Cancel"
+        confirmLoading={sendInvitationMutation.isPending}
+        okButtonProps={{
+          disabled: !invitationEmail.trim() || !isValidEmail(invitationEmail.trim()),
+        }}
+      >
+        <Input
+          placeholder="Enter email address"
+          value={invitationEmail}
+          onChange={(e) => setInvitationEmail(e.target.value)}
+          onPressEnter={handleSendInvitation}
+          disabled={sendInvitationMutation.isPending}
+          type="email"
+        />
+      </Modal>
     </div>
   )
 }
