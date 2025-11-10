@@ -407,7 +407,7 @@ export class ApiService {
   ): Promise<InvitationListResponse> {
     try {
       const params: Record<string, string> = {
-        limit: '10',
+        limit: "10",
       }
       if (cursor) {
         params.cursor = cursor

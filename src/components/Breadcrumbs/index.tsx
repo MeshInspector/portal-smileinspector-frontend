@@ -15,7 +15,9 @@ const Breadcrumbs: React.FC = () => {
   const router = useRouter()
   const isCasePage = matches.some((m) => m.routeId.endsWith("/cases/$code"))
   const isCasesPage = matches.some((m) => m.routeId.endsWith("/cases/"))
-  const isInvitationsPage = matches.some((m) => m.routeId.endsWith("/invitations/"))
+  const isInvitationsPage = matches.some((m) =>
+    m.routeId.endsWith("/invitations/"),
+  )
   const crumbs = matches
     .filter((m) => m.routeId !== "__root__" && m.routeId !== "/")
     .map((m) => {

@@ -11,8 +11,8 @@ const DARK_GRAY_COLOR = "#202124"
 const LIGHT_COLOR = "#FAFAFA"
 
 const ThemeWrapper: React.FC<ThemeWrapperProps> = ({
-                                                     children,
-                                                   }: ThemeWrapperProps) => {
+  children,
+}: ThemeWrapperProps) => {
   const [currentTheme, setCurrentTheme] = useState<string>(() => {
     const savedTheme = localStorage.getItem("theme")
     if (savedTheme) {
@@ -68,8 +68,7 @@ const ThemeWrapper: React.FC<ThemeWrapperProps> = ({
             colorBgContainer: isDark ? DARK_COLOR : LIGHT_COLOR,
             colorBgBase: isDark ? DARK_GRAY_COLOR : LIGHT_COLOR,
           },
-          Menu: {
-          },
+          Menu: {},
           Table: {
             headerBorderRadius: 0,
           },

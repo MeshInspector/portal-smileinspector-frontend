@@ -1,10 +1,10 @@
 .cases-list-page .ant-card-head {
-    padding: 16px;
+  padding: 16px;
 }
 
 .cases-table-container {
-    border-left: none;
-    border-right: none;
+  border-left: none;
+  border-right: none;
 }
 
 .cases-table-container .ant-card-body {

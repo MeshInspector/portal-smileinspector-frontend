@@ -5,7 +5,9 @@ import {
   Empty,
   Input,
   Select,
-  Space, Col, Row,
+  Space,
+  Col,
+  Row,
   Modal,
   Tag,
 } from "antd"
@@ -268,7 +270,7 @@ const InvitationsListPage = () => {
                     updateFilters(emailFilter, value || undefined)
                   }}
                   size="small"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                 >
                   Search
                 </Button>
@@ -280,7 +282,7 @@ const InvitationsListPage = () => {
                     updateFilters(emailFilter, undefined)
                   }}
                   size="small"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                 >
                   Reset
                 </Button>
@@ -391,7 +393,8 @@ const InvitationsListPage = () => {
         cancelText="Cancel"
         confirmLoading={sendInvitationMutation.isPending}
         okButtonProps={{
-          disabled: !invitationEmail.trim() || !isValidEmail(invitationEmail.trim()),
+          disabled:
+            !invitationEmail.trim() || !isValidEmail(invitationEmail.trim()),
         }}
       >
         <Input
