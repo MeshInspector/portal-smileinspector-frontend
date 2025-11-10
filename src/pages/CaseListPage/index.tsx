@@ -7,7 +7,6 @@ import {
   Table,
   type TablePaginationConfig,
   Tag,
-  Typography,
 } from "antd"
 import { useQuery } from "@tanstack/react-query"
 import type { Case, CaseList } from "../../types/case.ts"
@@ -26,8 +25,7 @@ import {
   getCaseStatusLabel,
   getCaseStatusColor,
 } from "../../utils/case-status.util"
-
-const { Title } = Typography
+import { usePageTitle } from "../../signals/title.signal.ts"
 
 const breakpoints: Breakpoint[] = ["xs", "sm", "md", "lg", "xl", "xxl"]
 
@@ -65,6 +63,7 @@ const isColumnSortable = (col: string) =>
   ].includes(col)
 
 const CaseListPage = () => {
+  const { setPageTitle } = usePageTitle()
   const router = useRouter()
   const search = useSearch({ strict: false })
   const { notify, contextHolder: notificationContextHolder } =
@@ -178,6 +177,10 @@ const CaseListPage = () => {
   })
 
   useEffect(() => {
+    setPageTitle("Cases")
+  }, [setPageTitle])
+
+  useEffect(() => {
     if (error) {
       notify.error(error, "Failed to load cases")
     }
@@ -224,16 +227,11 @@ const CaseListPage = () => {
   }
 
   return (
-    <>
+    <div className={"cases-list-page"}>
       {notificationContextHolder}
       <Card
         title={
-          <Row justify="start" align="middle">
-            <Col flex="none" xs={0} sm={12} className="cases-title-container">
-              <Title level={3} className="cases-title">
-                Cases
-              </Title>
-            </Col>
+          <Row justify="start" align="middle" className={"cases-table-header"}>
             <Col
               flex="auto"
               className="cases-search-container"
@@ -313,7 +311,7 @@ const CaseListPage = () => {
           />
         )}
       </Card>
-    </>
+    </div>
   )
 }
 

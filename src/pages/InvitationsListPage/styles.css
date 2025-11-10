@@ -1,0 +1,26 @@
+.invitations-list-page .ant-card-head {
+    padding: 16px;
+}
+
+.invitations-table-container {
+    margin: 0;
+    padding: 0;
+    border-left: none;
+    border-right: none;
+}
+
+.invitations-table-container .ant-card-body {
+  padding: 0 0 16px 0;
+  margin: 0;
+}
+
+.invitations-title {
+    margin: 0;
+}
+
+.invitations-load-more {
+    display: flex;
+    justify-content: end;
+    margin-top: 16px;
+    padding-right: 16px;
+}
