@@ -443,6 +443,27 @@ export class ApiService {
       throw new Error(parseError(error))
     }
   }
+
+  static async getInvitationByToken(
+    token: string,
+  ): Promise<InvitationResponse> {
+    try {
+      const response = await apiClient.get<InvitationResponse>(
+        `/v1/invitations/${token}`,
+      )
+      return response.data
+    } catch (error) {
+      throw new Error(parseError(error))
+    }
+  }
+
+  static async acceptInvitation(token: string): Promise<void> {
+    try {
+      await apiClient.post(`/v1/invitations/${token}/accept`)
+    } catch (error) {
+      throw new Error(parseError(error))
+    }
+  }
 }
 
 export default ApiService

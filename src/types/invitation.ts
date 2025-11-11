@@ -8,6 +8,7 @@ export enum EInvitationStatus {
 export interface InvitationResponse {
   uid: string
   accountUid: string
+  accountName: string
   email: string
   status: string
   createdAt: string
