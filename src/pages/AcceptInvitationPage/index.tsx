@@ -1,8 +1,7 @@
 import { Card, Button, Typography, Space, Spin } from "antd"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useParams, useRouter } from "@tanstack/react-router"
 import { useEffect } from "react"
-import { App as AntApp } from "antd"
 
 import "./styles.css"
 import { useNotifications } from "../../hooks/use-notifications.hook.ts"
@@ -14,9 +13,7 @@ const { Title, Paragraph } = Typography
 const AcceptInvitationPage = () => {
   const router = useRouter()
   const { invitationUid } = useParams({ strict: false })
-  const { notify, contextHolder: notificationContextHolder } =
-    useNotifications()
-  const { message } = AntApp.useApp()
+  const { notify, contextHolder: notificationContextHolder } = useNotifications()
 
   const {
     data: invitation,
@@ -24,19 +21,8 @@ const AcceptInvitationPage = () => {
     error: invitationError,
   } = useQuery({
     queryKey: ["invitation", invitationUid],
-    queryFn: () => ApiService.getInvitationByToken(invitationUid),
+    queryFn: () => ApiService.getInvitationByUid(invitationUid),
     enabled: !!invitationUid,
-  })
-
-  const acceptInvitationMutation = useMutation({
-    mutationFn: (uid: string) => ApiService.acceptInvitation(uid),
-    onSuccess: () => {
-      message.success("Invitation accepted successfully")
-      router.navigate({ to: "/cases" })
-    },
-    onError: (error) => {
-      notify.error(error, "Failed to accept invitation")
-    },
   })
 
   useEffect(() => {
@@ -47,7 +33,10 @@ const AcceptInvitationPage = () => {
 
   const handleAccept = () => {
     if (invitationUid) {
-      acceptInvitationMutation.mutate(invitationUid)
+      router.navigate({
+        to: "/invitations/$invitationUid/register",
+        params: { invitationUid },
+      })
     }
   }
 
@@ -92,8 +81,6 @@ const AcceptInvitationPage = () => {
             type="primary"
             size="large"
             onClick={handleAccept}
-            loading={acceptInvitationMutation.isPending}
-            disabled={acceptInvitationMutation.isPending}
           >
             Accept
           </Button>

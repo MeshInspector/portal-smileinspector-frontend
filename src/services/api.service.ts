@@ -432,11 +432,11 @@ export class ApiService {
     }
   }
 
-  static async sendInvitation(email: string): Promise<InvitationResponse> {
+  static async sendInvitation(email: string, shouldResend: boolean = false): Promise<InvitationResponse> {
     try {
       const response = await apiClient.post<InvitationResponse>(
         "/v1/invitations",
-        { email },
+        { email, shouldResend },
       )
       return response.data
     } catch (error) {
@@ -444,12 +444,10 @@ export class ApiService {
     }
   }
 
-  static async getInvitationByToken(
-    token: string,
-  ): Promise<InvitationResponse> {
+  static async getInvitationByUid(uid: string): Promise<InvitationResponse> {
     try {
       const response = await apiClient.get<InvitationResponse>(
-        `/v1/invitations/${token}`,
+        `/v1/invitations/${uid}`,
       )
       return response.data
     } catch (error) {
@@ -457,9 +455,9 @@ export class ApiService {
     }
   }
 
-  static async acceptInvitation(token: string): Promise<void> {
+  static async acceptInvitation(invitationUid: string, password: string): Promise<void> {
     try {
-      await apiClient.post(`/v1/invitations/${token}/accept`)
+      await apiClient.post(`/v1/invitations/${invitationUid}/accept`, { password })
     } catch (error) {
       throw new Error(parseError(error))
     }

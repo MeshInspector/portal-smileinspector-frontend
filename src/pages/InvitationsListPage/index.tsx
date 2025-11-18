@@ -78,7 +78,7 @@ const InvitationsListPage = () => {
   })
 
   const resendInvitationMutation = useMutation({
-    mutationFn: (email: string) => ApiService.sendInvitation(email),
+    mutationFn: (email: string) => ApiService.sendInvitation(email, true),
     onSuccess: () => {
       message.success("Invitation resent successfully")
       setResendingEmail(null)
