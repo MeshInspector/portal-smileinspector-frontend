@@ -432,7 +432,10 @@ export class ApiService {
     }
   }
 
-  static async sendInvitation(email: string, shouldResend: boolean = false): Promise<InvitationResponse> {
+  static async sendInvitation(
+    email: string,
+    shouldResend: boolean = false,
+  ): Promise<InvitationResponse> {
     try {
       const response = await apiClient.post<InvitationResponse>(
         "/v1/invitations",
@@ -450,14 +453,6 @@ export class ApiService {
         `/v1/invitations/${uid}`,
       )
       return response.data
-    } catch (error) {
-      throw new Error(parseError(error))
-    }
-  }
-
-  static async acceptInvitation(invitationUid: string, password: string): Promise<void> {
-    try {
-      await apiClient.post(`/v1/invitations/${invitationUid}/accept`, { password })
     } catch (error) {
       throw new Error(parseError(error))
     }

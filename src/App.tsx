@@ -11,8 +11,6 @@ import "./App.css"
 import CaseListPage from "./pages/CaseListPage"
 import CasePage from "./pages/CasePage"
 import InvitationsListPage from "./pages/InvitationsListPage"
-import AcceptInvitationPage from "./pages/AcceptInvitationPage"
-import RegisterUserPage from "./pages/RegisterUserPage"
 import AppOutlet from "./components/Outlet/Outlet.tsx"
 
 const rootRoute = createRootRoute()
@@ -73,24 +71,10 @@ const invitationsRoute = createRoute({
   }),
 })
 
-const acceptInvitationRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/invitations/$invitationUid/accept",
-  component: AcceptInvitationPage,
-})
-
-const registerUserRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/invitations/$invitationUid/register",
-  component: RegisterUserPage,
-})
-
 const routeTree = rootRoute.addChildren([
   redirectRoute,
   outletRoute.addChildren([casesRoute, caseRoute, filePreviewRoute]),
   invitationsOutletRoute.addChildren([invitationsRoute]),
-  acceptInvitationRoute,
-  registerUserRoute,
 ])
 
 const router = createRouter({
