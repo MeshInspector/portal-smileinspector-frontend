@@ -89,7 +89,7 @@ export const useLocalAuth = () => {
     const makeAuth = async () => {
       const tokens = await cognitoUserPoolsTokenProvider.getTokens()
       if (!tokens) {
-        const state = btoa(JSON.stringify({ redirectUri: window.location.href }))
+        const state = btoa(JSON.stringify({ requestedUri: window.location.href }))
         const queryParams = new URLSearchParams({ state })
         await navigate({
           href: `${import.meta.env.VITE_LOGIN_PAGE_URL}?${queryParams.toString()}`,
