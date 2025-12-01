@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useAuth } from "react-oidc-context"
 import Cookies from "js-cookie"
 import type { User } from "oidc-client-ts"
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router"
 import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito"
 
 const cognitoClientId = import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID
@@ -89,7 +89,12 @@ export const useLocalAuth = () => {
     const makeAuth = async () => {
       const tokens = await cognitoUserPoolsTokenProvider.getTokens()
       if (!tokens) {
-        await navigate({ href: import.meta.env.VITE_LOGIN_PAGE_URL, reloadDocument: true })
+        const state = btoa(JSON.stringify({ requestedUri: window.location.href }))
+        const queryParams = new URLSearchParams({ state })
+        await navigate({
+          href: `${import.meta.env.VITE_LOGIN_PAGE_URL}?${queryParams.toString()}`,
+          reloadDocument: true,
+        })
       }
     }
 
@@ -98,9 +103,7 @@ export const useLocalAuth = () => {
         console.error("Error making local auth:", error),
       )
     } else {
-      makeAuth().catch((error) =>
-        console.error("Error making auth:", error),
-      )
+      makeAuth().catch((error) => console.error("Error making auth:", error))
     }
   }, [auth, isLocalHost, navigate])
 

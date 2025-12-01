@@ -1,6 +1,19 @@
+.cases-list-page .ant-card-head {
+  padding: 16px;
+}
+
+.cases-table-container {
+  border-left: none;
+  border-right: none;
+}
+
 .cases-table-container .ant-card-body {
-  padding: 16px 24px 0;
+  padding: 0;
   margin: 0;
+}
+
+.cases-table-container .ant-pagination {
+  padding: 0 16px;
 }
 
 .cases-table .ant-table-tbody > tr {
@@ -12,10 +25,6 @@
   align-items: start;
   line-height: inherit;
   padding: 16px 0 8px;
-}
-
-.cases-title-container {
-  padding: 0;
 }
 
 .cases-search-container {

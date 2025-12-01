@@ -2,6 +2,10 @@ import axios from "axios"
 import type { Case, CaseList, CaseLockState } from "../types/case"
 import type { CaseFileList } from "../types/case-file.ts"
 import type { Comment, CommentList, CommentInput } from "../types/comment.ts"
+import type {
+  InvitationListResponse,
+  InvitationResponse,
+} from "../types/invitation.ts"
 import { parseError } from "../utils/error.util.ts"
 import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito"
 
@@ -393,6 +397,64 @@ export class ApiService {
       throw new Error(parseError(error))
     } finally {
       await ApiService.unlockCase(caseCode)
+    }
+  }
+
+  static async getInvitations(
+    cursor?: string,
+    email?: string,
+    status?: string,
+  ): Promise<InvitationListResponse> {
+    try {
+      const params: Record<string, string> = {
+        limit: "10",
+      }
+      if (cursor) {
+        params.cursor = cursor
+      }
+      if (email) {
+        params.email = email
+      }
+      if (status) {
+        params.status = status
+      }
+
+      const response = await apiClient.get<InvitationListResponse>(
+        "/v1/invitations",
+        {
+          params,
+        },
+      )
+
+      return response.data
+    } catch (error) {
+      throw new Error(parseError(error))
+    }
+  }
+
+  static async sendInvitation(
+    email: string,
+    shouldResend: boolean = false,
+  ): Promise<InvitationResponse> {
+    try {
+      const response = await apiClient.post<InvitationResponse>(
+        "/v1/invitations",
+        { email, shouldResend },
+      )
+      return response.data
+    } catch (error) {
+      throw new Error(parseError(error))
+    }
+  }
+
+  static async getInvitationByUid(uid: string): Promise<InvitationResponse> {
+    try {
+      const response = await apiClient.get<InvitationResponse>(
+        `/v1/invitations/${uid}`,
+      )
+      return response.data
+    } catch (error) {
+      throw new Error(parseError(error))
     }
   }
 }

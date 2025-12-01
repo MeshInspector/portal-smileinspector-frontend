@@ -19,6 +19,7 @@ import {
 } from "../../utils/case-status.util.ts"
 import { EditOutlined } from "@ant-design/icons"
 import CustomStatusModal from "../../components/CustomStatusModal"
+import { usePageTitle } from "../../signals/title.signal.ts"
 
 type CaseColumn =
   | {
@@ -39,6 +40,7 @@ type CaseColumn =
 const { Text } = Typography
 
 const CasePage: React.FC<object> = () => {
+  const { setPageTitle } = usePageTitle()
   const params = useParams({ strict: false })
   const code = params.code as string
   const { message } = AntApp.useApp()
@@ -120,6 +122,10 @@ const CasePage: React.FC<object> = () => {
   const handleCancelSetStatus = () => {
     setIsStatusModalVisible(false)
   }
+
+  useEffect(() => {
+    setPageTitle("Cases")
+  }, [setPageTitle])
 
   useEffect(() => {
     if (caseError) {

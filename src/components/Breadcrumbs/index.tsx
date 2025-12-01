@@ -15,6 +15,9 @@ const Breadcrumbs: React.FC = () => {
   const router = useRouter()
   const isCasePage = matches.some((m) => m.routeId.endsWith("/cases/$code"))
   const isCasesPage = matches.some((m) => m.routeId.endsWith("/cases/"))
+  const isInvitationsPage = matches.some((m) =>
+    m.routeId.endsWith("/invitations/"),
+  )
   const crumbs = matches
     .filter((m) => m.routeId !== "__root__" && m.routeId !== "/")
     .map((m) => {
@@ -29,6 +32,12 @@ const Breadcrumbs: React.FC = () => {
       }
       if (m.routeId.endsWith("/cases/")) {
         return { path: "/", label: "" }
+      }
+      if (m.routeId.endsWith("/invitations")) {
+        return { path: "/invitations", label: "Invitations" }
+      }
+      if (m.routeId.endsWith("/invitations/")) {
+        return { path: "/invitations", label: "" }
       }
       return { path: m.pathname, label: m.routeId }
     })
@@ -48,7 +57,8 @@ const Breadcrumbs: React.FC = () => {
   const toBreadCrumb = (crumb: Crumb, index: number) => {
     const isLast = index === crumbs.length - 1
     const isCases = crumb.label === "Cases"
-    const isLink = (isCasePage && !isLast) || isCases
+    const isInvitations = crumb.label === "Invitations"
+    const isLink = (isCasePage && !isLast) || isCases || isInvitations
 
     const handleClick = (
       e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -69,7 +79,7 @@ const Breadcrumbs: React.FC = () => {
           icon={<LeftOutlined />}
           onClick={handleBack}
           aria-label="Back"
-          disabled={isCasesPage}
+          disabled={isCasesPage || isInvitationsPage}
         />
       </Col>
       <Col>

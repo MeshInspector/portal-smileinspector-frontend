@@ -10,6 +10,7 @@ import { z } from "zod"
 import "./App.css"
 import CaseListPage from "./pages/CaseListPage"
 import CasePage from "./pages/CasePage"
+import InvitationsListPage from "./pages/InvitationsListPage"
 import AppOutlet from "./components/Outlet/Outlet.tsx"
 
 const rootRoute = createRootRoute()
@@ -26,6 +27,12 @@ const redirectRoute = createRoute({
 const outletRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/cases",
+  component: AppOutlet,
+})
+
+const invitationsOutletRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/invitations",
   component: AppOutlet,
 })
 
@@ -54,9 +61,20 @@ const filePreviewRoute = createRoute({
   preload: true,
 })
 
+const invitationsRoute = createRoute({
+  getParentRoute: () => invitationsOutletRoute,
+  path: "/",
+  component: InvitationsListPage,
+  validateSearch: z.object({
+    email: z.string().optional(),
+    status: z.string().optional(),
+  }),
+})
+
 const routeTree = rootRoute.addChildren([
   redirectRoute,
   outletRoute.addChildren([casesRoute, caseRoute, filePreviewRoute]),
+  invitationsOutletRoute.addChildren([invitationsRoute]),
 ])
 
 const router = createRouter({

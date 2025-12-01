@@ -17,6 +17,7 @@
   "dependencies": {
     "@aws-amplify/auth": "^6.14.0",
     "@aws-amplify/ui-react": "^6.11.2",
+    "@preact/signals-react": "^3.4.0",
     "@tanstack/react-query": "^5.81.5",
     "@tanstack/react-router": "^1.125.4",
     "antd": "^5.26.4",

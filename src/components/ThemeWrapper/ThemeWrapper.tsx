@@ -68,6 +68,10 @@ const ThemeWrapper: React.FC<ThemeWrapperProps> = ({
             colorBgContainer: isDark ? DARK_COLOR : LIGHT_COLOR,
             colorBgBase: isDark ? DARK_GRAY_COLOR : LIGHT_COLOR,
           },
+          Menu: {},
+          Table: {
+            headerBorderRadius: 0,
+          },
         },
       }}
     >
