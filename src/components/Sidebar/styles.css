@@ -71,3 +71,17 @@
 .sidebar .ant-menu-item-selected .ant-menu-item-icon {
   color: #1890ff;
 }
+
+/* Logo container styles */
+.sidebar-logo-container {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 24px 0 28px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+[data-theme="dark"] .sidebar-logo-container {
+  border-bottom-color: #303030;
+}
